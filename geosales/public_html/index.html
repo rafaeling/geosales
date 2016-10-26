@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script
+src="http://maps.googleapis.com/maps/api/js">
+</script>
+    
+         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script>
+
+
+  var data = [];
+
+ var money = [];
+
+
+var t = 0;
+
+var map;
+
+function initialize()
+{
+
+ var mapProp = {
+    center:new google.maps.LatLng(51.508742,-0.120850),
+    zoom:5,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+    };
+
+    map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+    var tiempo = 0;  
+
+    for(var i = 0; i < data.length ; ++i)
+    {
+
+      window.setTimeout(function(){partB();}, tiempo);
+
+      tiempo = tiempo + 2101;
+
+    }
+}
+
+function partB() {
+  
+
+   var dir = data[t] + ', es';
+
+      var geocoder =  new google.maps.Geocoder();
+
+      geocoder.geocode( { 'address': dir}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              //alert(dir + " : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng());
+                //new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng())
+
+                checkedNew = money[t].split('.').join("");
+
+                checkedNew = checkedNew.split(',').join("");
+
+
+               var cityCircle = new google.maps.Circle({
+                  strokeColor: '#00A3E3',
+                  strokeOpacity: 0.8,
+                  strokeWeight: 2,
+                  fillColor: '#00A3E3',
+                  fillOpacity: 0.35,
+                  map: map,
+                  center: {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()},
+                  radius: checkedNew/100
+                });
+
+               
+
+               cityCircle.setMap(map);
+
+              
+              var marker=new google.maps.Marker({
+                position:new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng()),
+                });
+
+              marker.setMap(map);
+              
+
+           var infowindow = new google.maps.InfoWindow({
+                content:money[t]
+                });
+
+              infowindow.open(map,marker);
+              
+            } else {
+            }
+      });
+
+      t = t + 1;
+
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+</head>
+
+<body>
+<div id="googleMap" style="width:1500px;height:900px;"></div>
+</body>
+</html>
+
